@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>CSEES 2015 - Survey Results</title>
+		<script type="text/javascript" src="d3/d3.js"></script>
+		<link rel="stylesheet" type="text/css" href="eesstyle.css">
+	</head>
+	<body>
+			<div id="nav">
+			</div>
+			<div id="headings">
+				<h1>Employment Engagement Survey</h1>
+				<h2>Theme Headline Results</h2>
+				<p id="more">More Detail</p>
+			</div>
+			<script type="text/javascript">
+				var w = 1100;
+				var h = 400;
+				var leftPadding = 32;
+				var rightPadding = 50;
+				var padding = 50;
+
+				//bring in the data
+				d3.csv("data/csees-results.csv", function(error,data){
+					data.forEach(function(d) {
+						d.Result = +d.Result;
+					})
+				//set the scales
+					var xScale = d3.scaleLinear()
+						.domain([30, 85])
+						.range([leftPadding, w - rightPadding]);
+				//set the axis
+					var xAxis = d3.axisBottom()
+						.scale(xScale)
+						.ticks(5);
+				//draw the viz
+					var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+					svg.selectAll("circle")
+						.data(data)
+						.enter()
+						.append("circle")
+						.attr("cx", function(d) { 
+							return xScale(d.Result);
+						})
+						.attr("cy", h/2)
+						.attr("r", function(d) {
+							return Math.sqrt(d.Result*25);
+						})
+						.attr("fill", function(d) {
+							if (d.Theme == "Employee Engagement") {
+								return "#02e0dc"
+							} else {
+								return "#005551"
+							}
+						})
+						.attr("opacity", function(d) {
+							if (d.Theme == "Employee Engagement") {
+								return 1
+							} else {
+								return 0.5
+							}
+						})
+						.on("mouseover", function(d) {
+							svg.append("text")
+								.attr("id", "tooltip")
+								.attr("x", function(){
+									return xScale(d.Result);
+								})
+								.attr("y", 90)
+								.attr("text-anchor", "left")
+								.attr("font-family", "open sans")
+								.attr("font-size", "11px")
+								.attr("font-weight", "normal")
+								.attr("fill", "#005551")
+								.text(d.Result + " </br> " + d.Theme + "%");
+						})
+						.on("mouseout", function(d) {
+							d3.select("#tooltip").remove();
+						});
+
+
+				//event 'more'
+					d3.select("#more")
+						.on("click", function() {
+							svg.selectAll("circle")
+								.data(data)
+								.transition()
+								.duration(1500)
+			     				.style("fill", function(d) {        
+			          				if (d.Result >= 51) {
+			          					return "#005551"
+			          				} else {
+			          					return "#AED002"
+			          				}           
+			      					;})
+						})		
+				});
+			</script>
+	</body>
+</html>
