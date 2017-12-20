@@ -28,7 +28,7 @@
 					})
 				//set the scales
 					var xScale = d3.scaleLinear()
-						.domain([30, 85])
+						.domain([15, 95])
 						.range([leftPadding, w - rightPadding]);
 				//set the axis
 					var xAxis = d3.axisBottom()
@@ -69,18 +69,33 @@
 							svg.append("text")
 								.attr("id", "tooltip")
 								.attr("x", function(){
-									return xScale(d.Result);
+									return xScale(d.Result)+5;
 								})
-								.attr("y", 90)
+								.attr("y", 98)
 								.attr("text-anchor", "left")
 								.attr("font-family", "open sans")
 								.attr("font-size", "11px")
 								.attr("font-weight", "normal")
 								.attr("fill", "#005551")
-								.text(d.Result + " </br> " + d.Theme + "%");
+								.text(d.Result + "%" + " " + d.Theme);
+							svg.append("line")
+								.attr("id", "tooltipLine")
+								.attr("x1", function() {
+									return xScale(d.Result);
+								})
+								.attr("y1", 90)
+								.attr("x2", function() {
+									return xScale(d.Result);
+								})
+								.attr("y2", function() {
+									return h/2 - Math.sqrt(d.Result*25);
+								})
+								.attr("stroke", "#02e0dc")
+								.attr("stroke-width", 1);
 						})
 						.on("mouseout", function(d) {
 							d3.select("#tooltip").remove();
+							d3.select("#tooltipLine").remove();
 						});
 
 
