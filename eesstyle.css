@@ -1,6 +1,6 @@
 body {
 	margin: auto;
-	background-color: #fff;
+	background-color: #1a1a1a;
 	max-width: 1100px;
 	font-family: "open sans";
 }
@@ -8,10 +8,10 @@ body {
 /*Div properties*/
 #nav {
 	height: 45px;
-	background-color: #fff;
+	background-color: #1a1a1a;
 }
 #heading {
-	background-color: #fff;
+	background-color: #1a1a1a;
 	height: 100px;
 	margin: 0px 0px 0px 0px;
 }
@@ -19,28 +19,30 @@ body {
 /*Text Styles*/
 h1 {
 	font-size: 21px;
-	font-weight: 600;
-	color: #005551;
+	font-weight: 300;
+	color: #00ffcc;
 }
 
 h2 {
 	font-size: 16px;
 	font-weight: 400;
-	color: #474747;
+	color: #aaa;
 }
 
 p {
 	font-size: 12px;
 	font-weight: 400;
-	color: #474747;
+	color: #aaa;
 }
 
 circle:hover {
-	stroke: #02e0dc;
-	stroke-width: "3";
-	opacity: .7;
+	opacity: .9;
 }
 
 #tooltip {
 	border: #000; 
+}
+
+.axis {
+	
 }
