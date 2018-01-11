@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>CSEES 2015 - Survey Results</title>
+		<script type="text/javascript" src="d3/d3.js"></script>
+		<link rel="stylesheet" type="text/css" href="eesstyle.css">
+	</head>
+	<body>
+			<div id="nav">
+			</div>
+			<div id="headings">
+				<h1>Employment Engagement Survey</h1>
+				<h2>Theme Headline Results</h2>
+				<p id="more">More Detail</p>
+			</div>
+			<script type="text/javascript">
+				var w = 1100;
+				var h = 400;
+				var leftPadding = 32;
+				var rightPadding = 50;
+				var padding = 50;
+
+				//bring in the data
+				d3.csv("data/csees-results.csv", function(error,data){
+					data.forEach(function(d) {
+						d.Result = +d.Result;
+					})
+				//set the scales
+					var xScale = d3.scaleLinear()
+						.domain([15, 95])
+						.range([leftPadding, w - rightPadding]);
+				//set the axis
+					var xAxis = d3.axisBottom()
+						.scale(xScale)
+						.ticks(5);
+				//draw the viz
+					var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h)
+						.attr("id", "viz1");
+
+					svg.selectAll("circle")
+						.data(data)
+						.enter()
+						.append("circle")
+						.attr("cx", function(d) { 
+							return xScale(d.Result);
+						})
+						.attr("cy", h/2)
+						.attr("r", function(d) {
+							return Math.sqrt(d.Result*25);
+						})
+						.attr("fill", function(d) {
+							if (d.Theme == "Employee Engagement") {
+								return "#ffcc00"
+							} else {
+								return "#00ffcc"
+							}
+						})
+						.attr("opacity", 0.5);
+					svg.selectAll("text")
+						.data(data)
+						.enter()
+						.append("text")
+						.attr("id", "tooltipA")
+						.attr("x", function(d) {
+							if (d.Result >= 70) {
+								return xScale(d.Result)-5
+							} else {
+								return xScale(d.Result)+5
+							}
+						})
+						.attr("y", function(d,i) {
+							return i * (10-h);
+						})
+						.attr("text-anchor", function(d) {
+							if (d.Result >= 70) {
+								return "end"
+							} else {
+								return "start"
+							}
+						})
+						.attr("font-family", "open sans")
+						.attr("font-size", "15px")
+						.attr("font-weight", 100)
+						.attr("fill", function(d) {
+							if (d.Theme == "Employee Engagement") {
+								return "#ffcc00"
+							} else {
+								return "#00ffcc"
+							}
+						})
+						.text(function(d) {
+							return d.Result + "%";
+						});
+
+				});
+			</script>
+	</body>
+</html>
