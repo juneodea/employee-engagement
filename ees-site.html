@@ -38,7 +38,8 @@
 					var svg = d3.select("body")
 						.append("svg")
 						.attr("width", w)
-						.attr("height", h);
+						.attr("height", h)
+						.attr("id", "viz1");
 
 					svg.selectAll("circle")
 						.data(data)
@@ -53,48 +54,93 @@
 						})
 						.attr("fill", function(d) {
 							if (d.Theme == "Employee Engagement") {
-								return "#02e0dc"
+								return "#ffcc00"
 							} else {
-								return "#005551"
+								return "#00ffcc"
 							}
 						})
-						.attr("opacity", function(d) {
-							if (d.Theme == "Employee Engagement") {
-								return 1
-							} else {
-								return 0.5
-							}
-						})
+						.attr("opacity", 0.5)
 						.on("mouseover", function(d) {
 							svg.append("text")
-								.attr("id", "tooltip")
-								.attr("x", function(){
-									return xScale(d.Result)+5;
+								.attr("id", "tooltipA")
+								.attr("x", function() {
+									if (d.Result >= 70) {
+										return xScale(d.Result)-5
+									} else {
+										return xScale(d.Result)+5
+									}
 								})
 								.attr("y", 98)
-								.attr("text-anchor", "left")
+								.attr("text-anchor", function() {
+									if (d.Result >= 70) {
+										return "end"
+									} else {
+										return "start"
+									}
+								})
+								.attr("font-family", "open sans")
+								.attr("font-size", "15px")
+								.attr("font-weight", 100)
+								.attr("fill", function() {
+									if (d.Theme == "Employee Engagement") {
+										return "#ffcc00"
+									} else {
+										return "#00ffcc"
+									}
+								})
+								.text(d.Result + "%");
+							svg.append("text")
+								.attr("id", "tooltipB")
+								.attr("x", function() {
+									if (d.Result >= 70) {
+										return xScale(d.Result)-5
+									} else {
+										return xScale(d.Result)+5
+									}
+								})
+								.attr("y", 113)
+								.attr("text-anchor", function() {
+									if (d.Result >= 70) {
+										return "end"
+									} else {
+										return "start"
+									}
+								})
 								.attr("font-family", "open sans")
 								.attr("font-size", "11px")
-								.attr("font-weight", "normal")
-								.attr("fill", "#005551")
-								.text(d.Result + "%" + " " + d.Theme);
+								.attr("font-weight", 300)
+								.attr("fill", function() {
+									if (d.Theme == "Employee Engagement") {
+										return "#ffcc00"
+									} else {
+										return "#00ffcc"
+									}
+								})
+								.text(d.Theme);
 							svg.append("line")
 								.attr("id", "tooltipLine")
 								.attr("x1", function() {
 									return xScale(d.Result);
 								})
-								.attr("y1", 90)
+								.attr("y1", 87)
 								.attr("x2", function() {
 									return xScale(d.Result);
 								})
 								.attr("y2", function() {
 									return h/2 - Math.sqrt(d.Result*25);
 								})
-								.attr("stroke", "#02e0dc")
+								.attr("stroke", function() {
+									if (d.Theme == "Employee Engagement") {
+										return "#ffcc00"
+									} else {
+										return "#00ffcc"
+									}
+								})
 								.attr("stroke-width", 1);
 						})
 						.on("mouseout", function(d) {
-							d3.select("#tooltip").remove();
+							d3.select("#tooltipA").remove();
+							d3.select("#tooltipB").remove();
 							d3.select("#tooltipLine").remove();
 						});
 
@@ -106,14 +152,18 @@
 								.data(data)
 								.transition()
 								.duration(1500)
-			     				.style("fill", function(d) {        
-			          				if (d.Result >= 51) {
-			          					return "#005551"
-			          				} else {
-			          					return "#AED002"
-			          				}           
-			      					;})
-						})		
+			     				.style("fill", function(d) {
+			     					if (d.Result >= 50) {
+			     						return "#00ffcc"
+			     					} else {
+			     						return "#ffffff"
+			     					}
+			     				})
+			     			svg.append("g")
+			     				.attr("class", "axis")
+								.attr("transform", "translate(0," + (h - padding) + ")")
+								.call(xAxis);
+						});		
 				});
 			</script>
 	</body>
